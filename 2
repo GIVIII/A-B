@@ -1,0 +1,40 @@
+from math import sqrt
+
+def calculate_distance(point1, point2):
+    x1, y1 = point1
+    x2, y2 = point2
+    return sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
+
+def find_suitable_orders(driver_route, orders):
+    driver_point_A = driver_route[0]
+    driver_point_B = driver_route[1]
+    suitable_orders = []
+
+    distances = [(order, calculate_distance(driver_point_A, order[0])) for order in orders]
+
+    sorted_orders = sorted(distances, key=lambda x: x[1])
+
+    for order, distance in sorted_orders:
+        order_point_A = order[0]
+        order_point_B = order[1]
+
+        if is_on_route(driver_point_A, driver_point_B, order_point_A) and has_free_space(driver):
+            suitable_orders.append(order)
+
+    return suitable_orders
+
+def is_on_route(point_A, point_B, point):
+    x1, y1 = point_A
+    x2, y2 = point_B
+    x, y = point
+    return (x2 - x1) * (y - y1) - (y2 - y1) * (x - x1) == 0
+
+def has_free_space(driver):
+    return driver['free_space'] > 0
+
+driver = {'free_space': 4}
+driver_route = [(10, 10), (20, 20)]
+orders = [[(15, 15), (25, 25)], [(12, 12), (22, 22)], [(30, 30), (40, 40)]]
+
+suitable_orders = find_suitable_orders(driver_route, orders)
+print(suitable_orders)
