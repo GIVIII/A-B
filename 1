@@ -1,0 +1,38 @@
+def find_matching_orders(route, orders):
+    matching_orders = []
+    for order in orders:
+        if is_on_route(order, route):
+            matching_orders.append(order)
+    return matching_orders
+
+def score_order(order):
+    score = 0
+    score += calculate_distance_score(order)
+    score += calculate_time_score(order)
+    score += calculate_passengers_score(order)
+    return score
+
+def suggest_orders(driver_route, available_orders):
+    matching_orders = find_matching_orders(driver_route, available_orders)
+    sorted_orders = sorted(matching_orders, key=lambda order: score_order(order), reverse=True)
+    return sorted_orders
+
+def calculate_distance_score(order_start, order_end, driver_position):
+    distance = calculate_distance (order_start, driver_position)
+    score = distance // 10
+    return score
+
+def calculate_time_score(order_start_time, order_end_time):
+    time_difference = order_start_time - order_end_time
+    score = time_difference // 15
+    return score
+
+def calculate_passengers_score(passengers_count):
+    score = passengers_count
+    return score
+
+def is_on_route(order, route):
+    return order in route
+
+def calculate_distance(start, end):
+    return 0
